@@ -299,17 +299,22 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
   const ans = [];
   for (let index = startMillis; index <= endMillis; index += gap) {
     for (let indexJ = 0; indexJ < countWorkDays; indexJ += 1) {
-      const currentDay = new Date(index + indexJ * MILLIS_TO_DAY).getTime();
+      let currentDay = new Date(index + indexJ * MILLIS_TO_DAY);
+      const dateYahr = `${currentDay.getFullYear()}`;
+      const dateMonth = `${currentDay.getMonth() + 1}`;
+      const dateDay = `${currentDay.getDate()}`;
+      currentDay = currentDay.getTime();
       if (currentDay <= endMillis) {
         ans.push(
-          new Date(index + indexJ * MILLIS_TO_DAY)
-            .toLocaleString()
-            .split(',')[0]
+          `${dateDay.padStart(2, '0')}-${dateMonth.padStart(
+            2,
+            '0'
+          )}-${dateYahr.padStart(2, '0')}`
         );
       }
     }
   }
-  return ans.map((item) => item.replaceAll('.', '-'));
+  return ans;
 }
 
 /**
