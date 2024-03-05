@@ -289,8 +289,27 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const MILLIS_TO_DAY = 1000 * 3600 * 24;
+  const gap = (countOffDays + countWorkDays) * MILLIS_TO_DAY;
+  const [startD, startM, startY] = period.start.split('-');
+  const startMillis = new Date(+startY, +startM - 1, +startD).getTime();
+  const [endD, endM, endY] = period.end.split('-');
+  const endMillis = new Date(+endY, +endM - 1, +endD).getTime();
+  const ans = [];
+  for (let index = startMillis; index <= endMillis; index += gap) {
+    for (let indexJ = 0; indexJ < countWorkDays; indexJ += 1) {
+      const currentDay = new Date(index + indexJ * MILLIS_TO_DAY).getTime();
+      if (currentDay <= endMillis) {
+        ans.push(
+          new Date(index + indexJ * MILLIS_TO_DAY)
+            .toLocaleString()
+            .split(',')[0]
+        );
+      }
+    }
+  }
+  return ans.map((item) => item.replaceAll('.', '-'));
 }
 
 /**
