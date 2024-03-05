@@ -32,8 +32,10 @@ function dateToTimestamp(date) {
  * Date(2015, 10, 20, 23, 15, 1) => '23:15:01'
  */
 function getTime(date) {
-  const oneTime = date.toLocaleString().split(', ')[1].split(' ')[0];
-  return oneTime.length === 7 ? `0${oneTime}` : oneTime;
+  const dateHour = `${date.getHours()}`;
+  const dateMin = `${date.getMinutes()}`;
+  const dateSec = `${date.getSeconds()}`;
+  return `${dateHour.padStart(2, '0')}:${dateMin.padStart(2, '0')}:${dateSec.padStart(2, '0')}`;
 }
 
 /**
